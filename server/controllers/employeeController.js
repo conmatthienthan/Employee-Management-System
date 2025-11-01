@@ -63,41 +63,13 @@ const getEmployees = async (req, res) => {
 // routes/employee.js hoặc controller
 const getEmployee = async (req, res) => {
   const { id } = req.params;
-
   try {
-    let employee;
-
-    // BƯỚC 2: Tìm theo _id (trực tiếp)
-    employee = await Employee.findById(id)
-      .populate("userId", "-password") // Loại bỏ password
+    const employee = await Employee.findById({_id: id})
+      .populate("userId", {password: 0})
       .populate("department");
-
-    // BƯỚC 3: Nếu không tìm thấy → thử tìm theo userId
-    if (!employee) {
-      employee = await Employee.findOne({ userId: id })
-        .populate("userId", "-password")
-        .populate("department");
-    }
-
-    // BƯỚC 4: Không tìm thấy → 404
-    if (!employee) {
-      return res.status(404).json({
-        success: false,
-        error: "Không tìm thấy nhân viên",
-      });
-    }
-
-    // BƯỚC 5: Trả về thành công
-    res.status(200).json({
-      success: true,
-      employee,
-    });
+    return res.status(200).json({success: true, employee});
   } catch (error) {
-    console.error("Lỗi getEmployee:", error);
-    res.status(500).json({
-      success: false,
-      error: "Lỗi server",
-    });
+    return res.status(500).json({success: false, error: "Lấy thông tin nhân viên không thành công"})
   }
 };
 
