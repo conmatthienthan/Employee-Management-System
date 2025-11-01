@@ -16,7 +16,7 @@ const Sidebar = () => {
                     <FaTachometerAlt /> 
                     <span>Trang chủ</span>
                 </NavLink>
-                <NavLink to ={`/employee-dashboard/ho-so/${user.id}`}
+                <NavLink to ={`/employee-dashboard/ho-so/${user._id}`}
                 className={({isActive}) => `${isActive ? "bg-teal-300": " "} flex items-center space-x-4 block py-2.5 px-4 rounded hover:bg-gray-700 transition-colors duration-200`} end>
                     <FaUsers /> 
                     <span>Hồ sơ của tôi</span>
