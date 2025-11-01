@@ -20,7 +20,8 @@ import AddSalary from "./components/salary/Add.jsx";
 import SalaryView from "./components/salary/View.jsx";
 import Summary from "./components/EmployeeDashboard/Summary.jsx";
 import Profile from "./components/employee/View.jsx";
-
+import LeaveView from "./components/leave/List.jsx";
+import AddLeave from "./components/leave/Add.jsx";
 // Component bảo vệ route + kiểm tra user
 const ProtectedEmployeeRoute = ({ children }) => {
   const { user, loading } = UseAuth();
@@ -86,7 +87,8 @@ function App() {
         >
           <Route index element={<Summary />} />
           <Route path="/employee-dashboard/ho-so/:id" element={<Profile />} />
-          
+          <Route path="/employee-dashboard/nghi-phep" element={<LeaveView />} />
+          <Route path="/employee-dashboard/them-nghi-phep" element={<AddLeave />} />
         </Route>
       </Routes>
     </BrowserRouter>

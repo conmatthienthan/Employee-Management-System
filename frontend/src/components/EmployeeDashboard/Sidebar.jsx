@@ -21,10 +21,10 @@ const Sidebar = () => {
                     <FaUsers /> 
                     <span>Hồ sơ của tôi</span>
                 </NavLink>
-                <NavLink to ="/employee-dashboard/cham-cong"
+                <NavLink to ="/employee-dashboard/nghi-phep"
                 className={({isActive}) => `${isActive ? "bg-teal-300": " "} flex items-center space-x-4 block py-2.5 px-4 rounded hover:bg-gray-700 transition-colors duration-200`} end>
                     <FaCalendarAlt /> 
-                    <span>Chấm công</span>
+                    <span>Nghỉ phép</span>
                 </NavLink>
                 <NavLink to ="/employee-dashboard/luong"
                 className={({isActive}) => `${isActive ? "bg-teal-300": " "} flex items-center space-x-4 block py-2.5 px-4 rounded hover:bg-gray-700 transition-colors duration-200`} end>

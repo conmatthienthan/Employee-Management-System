@@ -26,7 +26,7 @@ const AdminSidebar = () => {
                 <NavLink to ="/admin-dashboard/cham-cong"
                 className={({isActive}) => `${isActive ? "bg-teal-300": " "} flex items-center space-x-4 block py-2.5 px-4 rounded hover:bg-gray-700 transition-colors duration-200`} end>
                     <FaCalendarAlt /> 
-                    <span>Chấm công</span>
+                    <span>Nghỉ phép</span>
                 </NavLink>
                 <NavLink to ="/admin-dashboard/luong"
                 className={({isActive}) => `${isActive ? "bg-teal-300": " "} flex items-center space-x-4 block py-2.5 px-4 rounded hover:bg-gray-700 transition-colors duration-200`} end>

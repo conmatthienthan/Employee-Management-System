@@ -23,7 +23,7 @@ const EmployeeButton = ({ Id }) => {
       </button>
 
       <button className="bg-red-500 text-white px-4 py-1.5 min-w-[80px] rounded-lg shadow-md hover:bg-red-600 transition duration-200">
-        Chấm công
+        Nghỉ phép
       </button>
     </div>
   );

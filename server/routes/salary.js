@@ -5,6 +5,4 @@ const router = express.Router();
 
 router.post("/add", authMiddleware, addSalary);
 router.get("/employee/:id", authMiddleware, getSalary);
-/*router.put("/:id", authMiddleware, updateDepartment);
-router.delete("/:id", authMiddleware, deleteDepartment); */
 export default router;
