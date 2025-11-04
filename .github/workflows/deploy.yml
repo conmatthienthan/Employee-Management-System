@@ -5,29 +5,34 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
+permissions:
+  contents: write   # ← BẮT BUỘC: Cho phép push vào gh-pages
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    **permissions:**  # ← THÊM DÒNG NÀY
-      **contents: write**  # ← THÊM DÒNG NÀY
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4  # ← NÂNG V3 LÊN V4 (TỐT HƠN)
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v4  # ← NÂNG LÊN V4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: 18
+          cache: 'npm'
+          cache-dependency-path: frontend/package.json
 
-      - name: Install & Build
+      - name: Install & Build Frontend
         run: |
           cd frontend
           npm install
           npm run build
+          echo "Build completed!"
 
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v4  # ← NÂNG LÊN V4 (MỚI NHẤT)
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./frontend/dist
           force_orphan: true
+          enable_jekyll: false   # ← Tắt Jekyll (không cần .nojekyll nữa)
