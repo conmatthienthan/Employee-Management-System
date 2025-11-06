@@ -5,16 +5,18 @@ const addLeave = async (req, res) => {
   try {
     const { userId, leaveType, startDate, endDate, reason } = req.body;
 
+    // 1. Tìm Employee theo userId (ref từ User)
     const employee = await Employee.findOne({ userId });
     if (!employee) {
-      return res
-        .status(404)
-        .json({ success: false, error: "Không tìm thấy nhân viên" });
+      return res.status(404).json({
+        success: false,
+        error: "Không tìm thấy nhân viên với userId này",
+      });
     }
 
-
+    // 2. Tạo đơn nghỉ phép
     const newLeave = new Leave({
-      employeeId: employee._id,
+      employeeId: employee._id, // ← dùng _id của Employee
       leaveType,
       startDate,
       endDate,
@@ -22,13 +24,17 @@ const addLeave = async (req, res) => {
     });
 
     await newLeave.save();
-    return res.status(200).json({ success: true, leave: newLeave });
+
+    return res.status(201).json({
+      success: true,
+      data: newLeave,
+    });
   } catch (error) {
-    console.error(error);
-    return res
-      .status(500)
-      .json({ success: false, error: "Lỗi khi thêm đơn xin nghỉ phép" });
+      console.error("Lỗi addLeave:", error);
+      return res.status(500).json({
+        success: false,
+        error: error.message,
+      });
   }
 };
-
 export { addLeave };

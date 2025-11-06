@@ -8,7 +8,7 @@ const Add = () => {
   const navigate = useNavigate();
 
   const [leave, setLeave] = useState({
-    employeeId: user._id, // dùng đúng field backend yêu cầu
+    userId: user._id, // dùng đúng field backend yêu cầu
     leaveType: "",
     startDate: "",
     endDate: "",
@@ -62,8 +62,8 @@ const Add = () => {
               required
             >
               <option value="">-- Chọn loại nghỉ --</option>
-              <option value="Nghỉ ốm">Nghỉ ốm</option>
-              <option value="Nghỉ phép cá nhân">Nghỉ phép cá nhân</option>
+              <option value="Nghỉ vì ốm">Nghỉ ốm</option>
+              <option value="Nghỉ phép thông thường">Nghỉ phép cá nhân</option>
               <option value="Nghỉ phép năm">Nghỉ phép năm</option>
             </select>
           </div>
