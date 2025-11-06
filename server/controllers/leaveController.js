@@ -37,4 +37,21 @@ const addLeave = async (req, res) => {
       });
   }
 };
-export { addLeave };
+const getLeavesByEmployee = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    const employee = await Employee.findOne({ userId });
+    if (!employee) {
+      return res.status(404).json({ success: false, error: "Không tìm thấy nhân viên" });
+    }
+
+    const leaves = await Leave.find({ employeeId: employee._id })
+      .sort({ appliedAt: -1 });
+
+    res.status(200).json({ success: true, leaves });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+};
+export { addLeave, getLeavesByEmployee };

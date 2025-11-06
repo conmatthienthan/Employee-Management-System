@@ -51,7 +51,7 @@ const View = () => {
   return (
     <div className="p-5 max-w-6xl mx-auto">
       <div className="text-center mb-6">
-        <h2 className="text-3xl font-bold text-teal-700">Lịch sử lương</h2>
+        <h2 className="text-3xl font-bold text-teal-700">Lịch sử xin nghỉ phép</h2>
       </div>
 
       <div className="flex justify-end mb-4">
@@ -100,7 +100,7 @@ const View = () => {
         </div>
       ) : (
         <div className="text-center py-10 text-gray-500">
-          Không tìm thấy lịch sử lương
+          Không tìm thấy lịch sử xin nghỉ phép
         </div>
       )}
     </div>
