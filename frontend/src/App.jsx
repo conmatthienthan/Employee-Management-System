@@ -89,6 +89,7 @@ function App() {
           <Route path="/employee-dashboard/ho-so/:id" element={<Profile />} />
           <Route path="/employee-dashboard/nghi-phep" element={<LeaveView />} />
           <Route path="/employee-dashboard/them-nghi-phep" element={<AddLeave />} />
+          <Route path="/employee-dashboard/luong/:id" element={<SalaryView />} />
         </Route>
       </Routes>
     </BrowserRouter>

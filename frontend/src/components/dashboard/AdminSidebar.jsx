@@ -23,7 +23,7 @@ const AdminSidebar = () => {
                     <FaBuilding /> 
                     <span>Phòng Ban</span>
                 </NavLink>
-                <NavLink to ="/admin-dashboard/cham-cong"
+                <NavLink to ="/admin-dashboard/nghi-phep"
                 className={({isActive}) => `${isActive ? "bg-teal-300": " "} flex items-center space-x-4 block py-2.5 px-4 rounded hover:bg-gray-700 transition-colors duration-200`} end>
                     <FaCalendarAlt /> 
                     <span>Nghỉ phép</span>
