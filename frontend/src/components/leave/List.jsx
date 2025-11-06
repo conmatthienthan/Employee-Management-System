@@ -38,7 +38,7 @@ const List = () => {
     if (user?._id) {
       fetchLeaves();
     }
-  }, [user?._id]);
+  }, );
 
   // Tìm kiếm theo loại nghỉ, lý do, ngày
   useEffect(() => {
