@@ -8,12 +8,18 @@ const List = () => {
   const [filteredLeaves, setFilteredLeaves] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Lấy danh sách đơn nghỉ phép của nhân viên hiện tại
+  // LẤY DANH SÁCH NGHỈ PHÉP
   const fetchLeaves = async () => {
+    if (!user?._id) return;
+
     try {
+      setLoading(true);
+      setError(null);
+
       const response = await axios.get(
-        `http://localhost:5000/api/leave/employee/${user._id}`, // Dùng route đúng
+        `http://localhost:5000/api/leave/employee/${user._id}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -28,19 +34,18 @@ const List = () => {
       }
     } catch (error) {
       console.error("Lỗi khi lấy danh sách nghỉ phép:", error);
-      alert(error.response?.data?.error || "Không thể tải danh sách nghỉ phép");
+      setError(error.response?.data?.error || "Không thể tải danh sách");
     } finally {
       setLoading(false);
     }
   };
 
+  // GỌI API KHI USER CÓ ID
   useEffect(() => {
-    if (user?._id) {
-      fetchLeaves();
-    }
-  }, );
+    fetchLeaves();
+  }, [user?._id]); // ← CHỈ CHẠY KHI user._id THAY ĐỔI
 
-  // Tìm kiếm theo loại nghỉ, lý do, ngày
+  // TÌM KIẾM
   useEffect(() => {
     const term = searchTerm.toLowerCase();
     const filtered = leaves.filter((leave) => {
@@ -59,7 +64,7 @@ const List = () => {
     setFilteredLeaves(filtered);
   }, [searchTerm, leaves]);
 
-  // Badge trạng thái
+  // BADGE TRẠNG THÁI
   const getStatusBadge = (status) => {
     const styles = {
       "Chờ duyệt": "bg-yellow-100 text-yellow-800 border border-yellow-300",
@@ -75,7 +80,7 @@ const List = () => {
     );
   };
 
-  // Loading
+  // LOADING
   if (loading) {
     return (
       <div className="p-6 text-center">
@@ -85,15 +90,30 @@ const List = () => {
     );
   }
 
+  // LỖI
+  if (error) {
+    return (
+      <div className="p-6 text-center">
+        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg inline-block">
+          <p className="font-medium">Lỗi: {error}</p>
+          <button
+            onClick={fetchLeaves}
+            className="mt-2 px-4 py-1 bg-red-600 text-white rounded hover:bg-red-700 text-sm"
+          >
+            Thử lại
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="p-6 max-w-7xl mx-auto">
-      {/* Tiêu đề */}
       <div className="text-center mb-8">
         <h3 className="text-3xl font-bold text-teal-700">Đơn nghỉ phép của tôi</h3>
         <p className="text-gray-600 mt-1">Theo dõi trạng thái các đơn đã nộp</p>
       </div>
 
-      {/* Tìm kiếm + Nút thêm */}
       <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6">
         <div className="relative w-full sm:w-80">
           <input
@@ -103,18 +123,8 @@ const List = () => {
             onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full px-4 py-2.5 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all shadow-sm"
           />
-          <svg
-            className="absolute left-3 top-3 h-5 w-5 text-gray-400"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-            />
+          <svg className="absolute left-3 top-3 h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
           </svg>
         </div>
 
@@ -129,7 +139,6 @@ const List = () => {
         </Link>
       </div>
 
-      {/* Bảng dữ liệu */}
       {filteredLeaves.length > 0 ? (
         <div className="bg-white shadow-xl rounded-xl overflow-hidden border border-gray-200">
           <div className="overflow-x-auto">
@@ -141,20 +150,14 @@ const List = () => {
                   <th className="px-6 py-4">Từ ngày</th>
                   <th className="px-6 py-4">Đến ngày</th>
                   <th className="px-6 py-4">Lý do</th>
-                  <th className="px-6 py-4">Nộp ngày</th>
                   <th className="px-6 py-4">Trạng thái</th>
-
+                  <th className="px-6 py-4">Nộp ngày</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
                 {filteredLeaves.map((leave, index) => (
-                  <tr
-                    key={leave._id}
-                    className="hover:bg-teal-50 transition-colors duration-200"
-                  >
-                    <td className="px-6 py-4 font-medium text-gray-900">
-                      {index + 1}
-                    </td>
+                  <tr key={leave._id} className="hover:bg-teal-50 transition-colors duration-200">
+                    <td className="px-6 py-4 font-medium text-gray-900">{index + 1}</td>
                     <td className="px-6 py-4">
                       <span className="inline-block px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">
                         {leave.leaveType}
@@ -166,15 +169,10 @@ const List = () => {
                     <td className="px-6 py-4 text-gray-700">
                       {new Date(leave.endDate).toLocaleDateString("vi-VN")}
                     </td>
-                    <td
-                      className="px-6 py-4 text-gray-600 max-w-xs truncate"
-                      title={leave.reason}
-                    >
+                    <td className="px-6 py-4 text-gray-600 max-w-xs truncate" title={leave.reason}>
                       {leave.reason}
                     </td>
-                    <td className="px-6 py-4">
-                      {getStatusBadge(leave.status)}
-                    </td>
+                    <td className="px-6 py-4">{getStatusBadge(leave.status)}</td>
                     <td className="px-6 py-4 text-gray-500 text-xs">
                       {new Date(leave.appliedAt).toLocaleDateString("vi-VN")}
                     </td>

@@ -51,7 +51,7 @@ const View = () => {
   return (
     <div className="p-5 max-w-6xl mx-auto">
       <div className="text-center mb-6">
-        <h2 className="text-3xl font-bold text-teal-700">Lịch sử xin nghỉ phép</h2>
+        <h2 className="text-3xl font-bold text-teal-700">Lịch sử trả lương</h2>
       </div>
 
       <div className="flex justify-end mb-4">
