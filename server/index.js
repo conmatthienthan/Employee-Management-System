@@ -34,7 +34,7 @@ app.use("/api/salary", salaryRouter);
 app.use("/api/leave", leaveRouter);
 
 // ✅ Server lắng nghe toàn bộ mạng LAN
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5000;  
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`✅ Server đang chạy tại: http://172.16.33.168:${PORT}`);
 });
