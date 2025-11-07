@@ -1,4 +1,3 @@
-
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { UseAuth } from "./context/authContext"; // Import context
 
@@ -22,6 +21,7 @@ import Summary from "./components/EmployeeDashboard/Summary.jsx";
 import Profile from "./components/employee/View.jsx";
 import LeaveView from "./components/leave/List.jsx";
 import AddLeave from "./components/leave/Add.jsx";
+import Setting from "./components/EmployeeDashboard/Setting.jsx";
 // Component bảo vệ route + kiểm tra user
 const ProtectedEmployeeRoute = ({ children }) => {
   const { user, loading } = UseAuth();
@@ -90,6 +90,7 @@ function App() {
           <Route path="/employee-dashboard/nghi-phep" element={<LeaveView />} />
           <Route path="/employee-dashboard/them-nghi-phep" element={<AddLeave />} />
           <Route path="/employee-dashboard/luong/:id" element={<SalaryView />} />
+          <Route path="/employee-dashboard/cai-dat" element={<Setting />} />
         </Route>
       </Routes>
     </BrowserRouter>

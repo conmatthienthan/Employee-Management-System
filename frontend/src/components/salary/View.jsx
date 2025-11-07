@@ -82,7 +82,7 @@ const View = () => {
                 <tr key={salary._id} className="border-b hover:bg-gray-50 transition-colors">
                   <td className="px-6 py-4 font-medium">{index + 1}</td>
                   <td className="px-6 py-4">
-                    {salary.employeeId?.userId.name || "Chưa có tên"}
+                    {salary.employeeId?.userId?.name || "Chưa có tên"}
                   </td>
                   <td className="px-6 py-4">{salary.basicSalary.toLocaleString()}$</td>
                   <td className="px-6 py-4">{salary.allowances.toLocaleString() || 0}$</td>
