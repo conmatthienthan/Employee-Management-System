@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
-import { Search } from "lucide-react"; // icon search nếu bạn đã có lucide-react
+import axios from "axios"; // icon search nếu bạn đã có lucide-react
 
 const View = () => {
   const [salaries, setSalaries] = useState([]);
@@ -59,7 +58,7 @@ const View = () => {
     <div className="p-5 max-w-6xl mx-auto">
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold text-teal-700 mb-2">
-          📊 Lịch sử trả lương
+          Lịch sử trả lương
         </h2>
         <p className="text-gray-500">
           Xem chi tiết các khoản lương đã được thanh toán cho nhân viên
@@ -68,7 +67,6 @@ const View = () => {
 
       <div className="flex justify-end mb-6">
         <div className="relative w-80">
-          <Search className="absolute left-3 top-3 text-gray-400" size={18} />
           <input
             type="text"
             placeholder="Tìm kiếm theo tên nhân viên..."
