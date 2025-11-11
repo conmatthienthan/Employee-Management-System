@@ -22,7 +22,8 @@ const EmployeeButton = ({ Id }) => {
         Xem lương
       </button>
 
-      <button className="bg-red-500 text-white px-4 py-1.5 min-w-[80px] rounded-lg shadow-md hover:bg-red-600 transition duration-200">
+      <button className="bg-red-500 text-white px-4 py-1.5 min-w-[80px] rounded-lg shadow-md hover:bg-red-600 transition duration-200"
+      onClick={() => navigate(`/admin-dashboard/nhan-vien/nghi-phep/${Id}`)}>
         Nghỉ phép
       </button>
     </div>

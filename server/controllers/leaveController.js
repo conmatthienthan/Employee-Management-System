@@ -54,4 +54,61 @@ const getLeavesByEmployee = async (req, res) => {
     res.status(500).json({ success: false, error: error.message });
   }
 };
-export { addLeave, getLeavesByEmployee };
+const getLeaves = async (req, res) => {
+  try {
+    const leave = await Leave.find().populate({
+      path: "employeeId",
+      populate: [
+        {
+          path: 'department',
+          select: 'dep_name'
+        },
+        {
+          path: 'userId',
+          select: 'name'
+        }
+      ]
+    })
+    return res.status(200).json({success: true, leave})
+  } catch (error) {
+    console.log(error.message)
+    return res.status(500).json({success: false, error: "Không thể lấy danh sách nghỉ phép"})
+  }
+}
+const getLeaveDetail = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const leave = await Leave.findById(id).populate({
+      path: "employeeId",
+      populate: [
+        { path: "department", select: "dep_name" },
+        { path: "userId", select: "name profileImage" },
+      ],
+    });
+
+    if (!leave) {
+      return res.status(404).json({ success: false, error: "Không tìm thấy đơn nghỉ phép" });
+    }
+
+    return res.status(200).json({ success: true, leave });
+  } catch (error) {
+    console.error("Lỗi lấy chi tiết đơn:", error.message);
+    return res.status(500).json({ success: false, error: "Lỗi server" });
+  }
+};
+const updateLeave = async (req, res) => {
+ try {
+  const {id} = req.params;
+  const leave = await Leave.findByIdAndUpdate({_id: id}, {status: req.body.status})
+
+  if (!leave) {
+     return res.status(404).json({ success: false, error: "Không tìm thấy đơn nghỉ phép" });
+  }
+  return res.status(200).json({success: true})
+ } catch (error) {
+    console.error("Lỗi lấy chi tiết đơn:", error.message);
+    return res.status(500).json({ success: false, error: "Lỗi server" });
+  }
+}
+export { addLeave, getLeavesByEmployee, getLeaves, getLeaveDetail, updateLeave };

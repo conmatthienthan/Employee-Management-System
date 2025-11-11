@@ -21,6 +21,8 @@ import Summary from "./components/EmployeeDashboard/Summary.jsx";
 import Profile from "./components/employee/View.jsx";
 import LeaveView from "./components/leave/List.jsx";
 import AddLeave from "./components/leave/Add.jsx";
+import CheckLeave from "./components/leave/CheckLeave.jsx";
+import LeaveDetail from "./components/leave/Detail.jsx";
 import Setting from "./components/EmployeeDashboard/Setting.jsx";
 // Component bảo vệ route + kiểm tra user
 const ProtectedEmployeeRoute = ({ children }) => {
@@ -70,7 +72,10 @@ function App() {
           <Route path="nhan-vien/sua-thong-tin-nhan-vien/:id" element={<Edit />} />
           <Route path="nhan-vien/xem-luong-nhan-vien/:id" element={<SalaryView />} />
           <Route path="luong" element={<AddSalary />} />
-        </Route>
+          <Route path="nghi-phep" element = {<CheckLeave/>} />     
+          <Route path="nghi-phep/:id" element = {<LeaveDetail/>} />     
+
+          </Route>
 
         {/* EMPLOYEE ROUTES – BẢO VỆ USER */}
         <Route
