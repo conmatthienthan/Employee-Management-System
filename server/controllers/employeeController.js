@@ -3,32 +3,47 @@ import Employee from "../models/Employee.js";
 import User from "../models/User.js";
 import bcrypt from "bcrypt";
 import multer from "multer";
+import { fileURLToPath } from "url";
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
+// ---------------------- Cấu hình lưu ảnh ----------------------
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-     cb(null, "../public/uploads")
+    cb(null, path.join(__dirname, "../public/uploads")); // ✅ Đường dẫn tuyệt đối
   },
   filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname))
-  }
-})
+    cb(null, Date.now() + path.extname(file.originalname)); // ✅ Đặt tên file duy nhất
+  },
+});
 
-const upload = multer({storage: storage})
+const upload = multer({ storage });
+
 // ---------------------- Thêm nhân viên ----------------------
 const addEmployee = async (req, res) => {
   try {
     const { name, email, password, employeeId, dob, gender, phone, address, department, salary, role } = req.body;
 
-    const user = await User.findOne({ email });
-    if (user) {
+    // Kiểm tra email trùng
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
       return res.status(400).json({ success: false, error: "Email đã tồn tại" });
     }
-    const hashPassword = await bcrypt.hash(password, 10)
-    const newUser = new User({ name, email, password: hashPassword, role, profileImage: req.file ? req.file.filename : ""});
+
+    // Tạo user mới
+    const hashPassword = await bcrypt.hash(password, 10);
+    const newUser = new User({
+      name,
+      email,
+      password: hashPassword,
+      role,
+      profileImage: req.file ? req.file.filename : "",
+    });
     await newUser.save();
 
+    // ✅ Dùng newUser._id, không phải user._id
     const newEmployee = new Employee({
-      userId: user._id,
+      userId: newUser._id,
       employeeId,
       dob,
       gender,
@@ -36,16 +51,17 @@ const addEmployee = async (req, res) => {
       address,
       department,
       salary,
+      email: email, // thêm nếu bạn muốn lưu trực tiếp trong Employee
     });
-
     await newEmployee.save();
 
-    res.status(200 ).json({ success: true, message: "Thêm nhân viên thành công" });
+    res.status(200).json({ success: true, message: "Thêm nhân viên thành công" });
   } catch (error) {
     console.error("Lỗi khi thêm nhân viên:", error);
     res.status(500).json({ success: false, error: "Lỗi server khi thêm nhân viên" });
   }
 };
+
 
 // ---------------------- Lấy tất cả nhân viên ----------------------
 const getEmployees = async (req, res) => {
