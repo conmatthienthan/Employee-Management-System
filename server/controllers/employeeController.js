@@ -6,7 +6,7 @@ import multer from "multer";
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "../public/uploads")
+     cb(null, "../public/uploads")
   },
   filename: (req, file, cb) => {
     cb(null, Date.now() + path.extname(file.originalname))
@@ -44,7 +44,7 @@ const addEmployee = async (req, res) => {
   } catch (error) {
     console.error("Lỗi khi thêm nhân viên:", error);
     res.status(500).json({ success: false, error: "Lỗi server khi thêm nhân viên" });
-  } c
+  }
 };
 
 // ---------------------- Lấy tất cả nhân viên ----------------------
