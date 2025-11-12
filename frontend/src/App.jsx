@@ -71,6 +71,7 @@ function App() {
           <Route path="nhan-vien/:id" element={<View />} />
           <Route path="nhan-vien/sua-thong-tin-nhan-vien/:id" element={<Edit />} />
           <Route path="nhan-vien/xem-luong-nhan-vien/:id" element={<SalaryView />} />
+          <Route path="nhan-vien/nghi-phep/:id" element= {<LeaveView/>}></Route>
           <Route path="luong" element={<AddSalary />} />
           <Route path="nghi-phep" element = {<CheckLeave/>} />     
           <Route path="nghi-phep/:id" element = {<LeaveDetail/>} />     

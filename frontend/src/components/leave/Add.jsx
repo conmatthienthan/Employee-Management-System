@@ -35,7 +35,7 @@ const Add = () => {
 
       if (response.data.success) {
         alert("Đơn nghỉ phép đã được gửi thành công!");
-        navigate("/employee-dashboard/leave");
+        navigate("/employee-dashboard/nghi-phep");
       }
     } catch (error) {
       console.error("Lỗi khi gửi đơn:", error);
