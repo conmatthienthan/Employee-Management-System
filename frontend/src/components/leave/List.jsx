@@ -1,25 +1,29 @@
-import React, {useEffect, useState} from "react";
-import {Link, } from 'react-router-dom'
+import React, { useEffect, useState } from "react";
+import { Link, useParams, useLocation } from 'react-router-dom';
 import axios from "axios";
-import {UseAuth} from '../../context/authContext.jsx';
+import { UseAuth } from '../../context/authContext.jsx';
+
 const List = () => {
- const { user } = UseAuth();
+  const { user } = UseAuth();
+  const { id } = useParams();
+  const location = useLocation();
   const [leaves, setLeaves] = useState([]);
   const [filteredLeaves, setFilteredLeaves] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // LẤY DANH SÁCH NGHỈ PHÉP
-  const fetchLeaves = async () => {
-    if (!user?._id) return;
+  const isAdminPage = location.pathname.includes("/admin-dashboard");
+  const targetId = isAdminPage ? id : (id || user?._id); // QUAN TRỌNG
 
+  const fetchLeaves = async () => {
+    if (!targetId) return;
     try {
       setLoading(true);
       setError(null);
 
       const response = await axios.get(
-        `http://localhost:5000/api/leave/employee/${user._id}`,
+        `http://localhost:5000/api/leave/employee/${targetId}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -40,31 +44,24 @@ const List = () => {
     }
   };
 
-  // GỌI API KHI USER CÓ ID
   useEffect(() => {
     fetchLeaves();
-  }, [user?._id]); // ← CHỈ CHẠY KHI user._id THAY ĐỔI
+  }, [targetId]);
 
   // TÌM KIẾM
   useEffect(() => {
+    if (!leaves || !Array.isArray(leaves)) return;
     const term = searchTerm.toLowerCase();
     const filtered = leaves.filter((leave) => {
       const type = leave.leaveType?.toLowerCase() || "";
       const reason = leave.reason?.toLowerCase() || "";
       const startDate = new Date(leave.startDate).toLocaleDateString("vi-VN");
       const endDate = new Date(leave.endDate).toLocaleDateString("vi-VN");
-
-      return (
-        type.includes(term) ||
-        reason.includes(term) ||
-        startDate.includes(term) ||
-        endDate.includes(term)
-      );
+      return type.includes(term) || reason.includes(term) || startDate.includes(term) || endDate.includes(term);
     });
     setFilteredLeaves(filtered);
   }, [searchTerm, leaves]);
 
-  // BADGE TRẠNG THÁI
   const getStatusBadge = (status) => {
     const styles = {
       "Chờ duyệt": "bg-yellow-100 text-yellow-800 border border-yellow-300",
@@ -72,15 +69,12 @@ const List = () => {
       "Không duyệt": "bg-red-100 text-red-800 border border-red-300",
     };
     return (
-      <span
-        className={`px-3 py-1 rounded-full text-xs font-semibold ${styles[status] || "bg-gray-100 text-gray-800"}`}
-      >
+      <span className={`px-3 py-1 rounded-full text-xs font-semibold ${styles[status] || "bg-gray-100 text-gray-800"}`}>
         {status}
       </span>
     );
   };
 
-  // LOADING
   if (loading) {
     return (
       <div className="p-6 text-center">
@@ -90,16 +84,12 @@ const List = () => {
     );
   }
 
-  // LỖI
   if (error) {
     return (
       <div className="p-6 text-center">
         <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg inline-block">
           <p className="font-medium">Lỗi: {error}</p>
-          <button
-            onClick={fetchLeaves}
-            className="mt-2 px-4 py-1 bg-red-600 text-white rounded hover:bg-red-700 text-sm"
-          >
+          <button onClick={fetchLeaves} className="mt-2 px-4 py-1 bg-red-600 text-white rounded hover:bg-red-700 text-sm">
             Thử lại
           </button>
         </div>
@@ -110,7 +100,9 @@ const List = () => {
   return (
     <div className="p-6 max-w-7xl mx-auto">
       <div className="text-center mb-8">
-        <h3 className="text-3xl font-bold text-teal-700">Đơn nghỉ phép của tôi</h3>
+        <h3 className="text-3xl font-bold text-teal-700">
+          {isAdminPage ? "Đơn nghỉ phép của nhân viên" : "Đơn nghỉ phép của tôi"}
+        </h3>
         <p className="text-gray-600 mt-1">Theo dõi trạng thái các đơn đã nộp</p>
       </div>
 
@@ -128,15 +120,17 @@ const List = () => {
           </svg>
         </div>
 
-        <Link
-          to="/employee-dashboard/them-nghi-phep"
-          className="flex items-center gap-2 px-5 py-2.5 bg-teal-600 hover:bg-teal-700 text-white font-medium rounded-lg shadow-md transition-all transform hover:scale-105"
-        >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-          </svg>
-          Thêm đơn mới
-        </Link>
+        {!isAdminPage && (
+          <Link
+            to="/employee-dashboard/them-nghi-phep"
+            className="flex items-center gap-2 px-5 py-2.5 bg-teal-600 hover:bg-teal-700 text-white font-medium rounded-lg shadow-md transition-all transform hover:scale-105"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+            </svg>
+            Thêm đơn mới
+          </Link>
+        )}
       </div>
 
       {filteredLeaves.length > 0 ? (
@@ -188,17 +182,22 @@ const List = () => {
           <p className="text-gray-500 text-lg font-medium">
             {searchTerm
               ? `Không tìm thấy đơn nào phù hợp với "${searchTerm}"`
+              : isAdminPage
+              ? "Nhân viên chưa nộp đơn nào"
               : "Bạn chưa nộp đơn nghỉ phép nào"}
           </p>
-          <Link
-            to="/employee-dashboard/them-nghi-phep"
-            className="inline-block mt-4 px-5 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition"
-          >
-            Nộp đơn đầu tiên
-          </Link>
+          {!isAdminPage && (
+            <Link
+              to="/employee-dashboard/them-nghi-phep"
+              className="inline-block mt-4 px-5 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition"
+            >
+              Nộp đơn đầu tiên
+            </Link>
+          )}
         </div>
       )}
     </div>
   );
 };
+
 export default List;

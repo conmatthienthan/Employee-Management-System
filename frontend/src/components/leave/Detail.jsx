@@ -194,7 +194,7 @@ const Detail = () => {
   );
 };
 
-// ✅ Component con an toàn (không lồng <p>)
+// ✅ Component con an toàn
 const Info = ({ label, value }) => (
   <div>
     <p className="text-sm text-gray-500">{label}</p>

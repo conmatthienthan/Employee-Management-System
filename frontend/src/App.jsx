@@ -71,11 +71,11 @@ function App() {
           <Route path="nhan-vien/:id" element={<View />} />
           <Route path="nhan-vien/sua-thong-tin-nhan-vien/:id" element={<Edit />} />
           <Route path="nhan-vien/xem-luong-nhan-vien/:id" element={<SalaryView />} />
-          <Route path="nhan-vien/nghi-phep/:id" element= {<LeaveView/>}></Route>
+          <Route path="nhan-vien/nghi-phep/:id" element={<LeaveView />} />
           <Route path="luong" element={<AddSalary />} />
           <Route path="nghi-phep" element = {<CheckLeave/>} />     
           <Route path="nghi-phep/:id" element = {<LeaveDetail/>} />     
-
+          <Route path="cai-dat" element = {<Setting/>}/>
           </Route>
 
         {/* EMPLOYEE ROUTES – BẢO VỆ USER */}
@@ -93,7 +93,7 @@ function App() {
         >
           <Route index element={<Summary />} />
           <Route path="/employee-dashboard/ho-so/:id" element={<Profile />} />
-          <Route path="/employee-dashboard/nghi-phep" element={<LeaveView />} />
+          <Route path="/employee-dashboard/nghi-phep/:id" element={<LeaveView />} />
           <Route path="/employee-dashboard/them-nghi-phep" element={<AddLeave />} />
           <Route path="/employee-dashboard/luong/:id" element={<SalaryView />} />
           <Route path="/employee-dashboard/cai-dat" element={<Setting />} />

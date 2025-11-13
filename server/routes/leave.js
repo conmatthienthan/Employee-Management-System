@@ -4,7 +4,8 @@ import  {addLeave, getLeavesByEmployee, getLeaves, getLeaveDetail, updateLeave} 
 const router = express.Router();
 
 router.post("/add", authMiddleware, addLeave);
-router.get("/employee/:userId", authMiddleware, getLeavesByEmployee);
+router.get("/employee/:id", authMiddleware, getLeavesByEmployee);
+router.get("/:id", authMiddleware, getLeavesByEmployee);
 router.get("/detail/:id", authMiddleware, getLeaveDetail);
 router.get('/', authMiddleware, getLeaves)
 router.put('/:id', authMiddleware, updateLeave)

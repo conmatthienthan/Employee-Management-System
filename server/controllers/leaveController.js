@@ -39,21 +39,20 @@ const addLeave = async (req, res) => {
 };
 const getLeavesByEmployee = async (req, res) => {
   try {
-    const { userId } = req.params;
-
-    const employee = await Employee.findOne({ userId });
-    if (!employee) {
-      return res.status(404).json({ success: false, error: "Không tìm thấy nhân viên" });
-    }
-
-    const leaves = await Leave.find({ employeeId: employee._id })
-      .sort({ appliedAt: -1 });
-
-    res.status(200).json({ success: true, leaves });
+    const { id } = req.params;
+    let leaves = await Leave.find({employeeId: id})
+    
+    if (!leaves) {
+      const employee = await Employee.findOne({userId: id})
+      leaves = await Leave.find({employeeId: employee._id})
+    } 
+    return res.status(200).json({success: true, leaves})
   } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
+    console.log(error.message)
+    return res.status(500).json({success: false, error: "Lỗi khi lấy danh sách đơn xin nghỉ phép"})
   }
-};
+}
+
 const getLeaves = async (req, res) => {
   try {
     const leave = await Leave.find().populate({
