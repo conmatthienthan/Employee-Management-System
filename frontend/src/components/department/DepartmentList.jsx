@@ -11,18 +11,16 @@ const DepartmentList = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredDepartments, setFilteredDepartments] = useState([]);
 
-  const onDepartmentDelete = React.useCallback((id) => {
-    setDepartments((prev) => prev.filter((dep) => dep._id !== id));
-    setFilteredDepartments((prev) => prev.filter((dep) => dep._id !== id));
-  }, []);
+  const onDepartmentDelete = () => {
+   fetchDepartments();
+  }
 
-  useEffect(() => {
-    const fetchDepartments = async () => {
+  const fetchDepartments = async () => {
       setDepLoading(true);
       try {
         const response = await axios.get("http://localhost:5000/api/department", {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            Authorization: `Bearer ${localStorage.getItem("token")}`, 
           },
         });
 
@@ -50,8 +48,10 @@ const DepartmentList = () => {
         setDepLoading(false);
       }
     };
+    
+  useEffect(() => {
     fetchDepartments();
-  }, [onDepartmentDelete]);
+  }, []);
 
   const handleSearch = (e) => {
     const value = e.target.value.toLowerCase();
