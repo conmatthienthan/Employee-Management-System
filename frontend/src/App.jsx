@@ -92,11 +92,11 @@ function App() {
           }
         >
           <Route index element={<Summary />} />
-          <Route path="/employee-dashboard/ho-so/:id" element={<Profile />} />
-          <Route path="/employee-dashboard/nghi-phep/:id" element={<LeaveView />} />
-          <Route path="/employee-dashboard/them-nghi-phep" element={<AddLeave />} />
-          <Route path="/employee-dashboard/luong/:id" element={<SalaryView />} />
-          <Route path="/employee-dashboard/cai-dat" element={<Setting />} />
+          <Route path="ho-so/:id" element={<Profile />} />
+          <Route path="nghi-phep/:id" element={<LeaveView />} />
+          <Route path="them-nghi-phep" element={<AddLeave />} />
+          <Route path="luong/:id" element={<SalaryView />} />
+          <Route path="cai-dat" element={<Setting />} />
         </Route>
       </Routes>
     </BrowserRouter>
