@@ -21,19 +21,19 @@ const addSalary = async (req, res) => {
 }
 const getSalary = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { id, role } = req.params;
     let salaries;
-
-    // 1️⃣ Tìm theo employeeId trước
-    salaries = await Salary.find({ employeeId: id })
-      .populate({
-        path: "employeeId",
-        populate: { path: "userId", select: "name email" },
-      })
-      .sort({ payDate: -1 });
-
+    if (role === "admin") {
+        // 1️⃣ Tìm theo employeeId trước
+      salaries = await Salary.find({ employeeId: id })
+        .populate({
+          path: "employeeId",
+          populate: { path: "userId", select: "name email" },
+        })
+        .sort({ payDate: -1 });
+    } else {
     // 2️⃣ Nếu không có kết quả, thử tìm theo userId (nhân viên đang đăng nhập)
-    if (!salaries || salaries.length < 1) {
+    if (!salaries || salaries.length === 0) {
       const employee = await Employee.findOne({ userId: id });
 
       if (employee) {
@@ -45,7 +45,7 @@ const getSalary = async (req, res) => {
           .sort({ payDate: -1 });
       }
     }
-
+}
     return res.status(200).json({ success: true, salaries });
   } catch (error) {
     console.error("Lỗi khi xuất thông tin lương nhân viên:", error);

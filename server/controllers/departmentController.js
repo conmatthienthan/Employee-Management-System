@@ -49,7 +49,7 @@ const deleteDepartment = async (req, res) => {
     const { id } = req.params;
 
     const deletedep = await Department.findByIdAndDelete(id);
-
+    await deletedep.deleteOne();
     if (!deletedep) {
       return res.status(404).json({ success: false, error: "Không tìm thấy phòng ban để xóa" });
     }

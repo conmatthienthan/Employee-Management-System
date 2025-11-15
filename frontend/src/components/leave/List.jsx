@@ -1,14 +1,15 @@
 import React, {useEffect, useState} from "react";
 import {Link, useParams } from 'react-router-dom'
 import axios from "axios";
+import { UseAuth } from "../../context/authContext";
 const List = () => {
   const [leaves, setLeaves] = useState([]);
   const [filteredLeaves, setFilteredLeaves] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-   const {id} = useParams();
-
+  const {id} = useParams();
+  const {user} = UseAuth();
   // LẤY DANH SÁCH NGHỈ PHÉP  
   const fetchLeaves = async () => {
     try {
@@ -16,7 +17,7 @@ const List = () => {
       setError(null);
 
       const response = await axios.get(
-        `http://localhost:5000/api/leave/employee/${id}`,
+        `http://localhost:5000/api/leave/${id}/${user.role}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,

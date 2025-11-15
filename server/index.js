@@ -6,6 +6,7 @@ import departmentRouter from "./routes/department.js";
 import employeeRouter from "./routes/employee.js";
 import salaryRouter from "./routes/salary.js";
 import leaveRouter from "./routes/leave.js";
+import dashboardRouter from "./routes/dashboard.js";
 import settingRouter from "./routes/setting.js";
 import connectToDatabase from "./db/db.js";
 dotenv.config(); // đọc file .env
@@ -33,7 +34,7 @@ app.use("/api/employee", employeeRouter);
 app.use("/api/salary", salaryRouter);
 app.use("/api/leave", leaveRouter);
 app.use("/api/setting", settingRouter);
-
+app.use("/api/dashboard", dashboardRouter);
 // ✅ Server lắng nghe toàn bộ mạng LAN
 const PORT = process.env.PORT || 5000;  
 app.listen(PORT, "0.0.0.0", () => {

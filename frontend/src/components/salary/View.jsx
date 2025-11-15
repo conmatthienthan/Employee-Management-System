@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios"; // icon search nếu bạn đã có lucide-react
+import { UseAuth } from "../../context/authContext";
 
 const View = () => {
   const [salaries, setSalaries] = useState([]);
   const [filteredSalaries, setFilteredSalaries] = useState([]);
   const [loading, setLoading] = useState(true);
   const { id } = useParams();
-
+  const {user} = UseAuth();
   const fetchSalaries = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/salary/employee/${id}`,
+        `http://localhost:5000/api/salary/employee/${id}/${user.role}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
