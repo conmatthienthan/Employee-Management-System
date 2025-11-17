@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { FaBuilding, FaCalendarAlt, FaTachometerAlt, FaUsers, FaMoneyBillWave, FaCogs } from "react-icons/fa";
+import { FaBuilding, FaCalendarAlt, FaTachometerAlt, FaUsers, FaMoneyBillWave, FaCogs, FaRegCalendarAlt, FaRegCalendarCheck   } from "react-icons/fa";
 const AdminSidebar = () => {
     return (
         <div className="bg-gray-800 text-white h-screen fixed left-0 top-0 bottom-0 space-y-2 w-64">
@@ -32,6 +32,16 @@ const AdminSidebar = () => {
                 className={({isActive}) => `${isActive ? "bg-teal-300": " "} flex items-center space-x-4 block py-2.5 px-4 rounded hover:bg-gray-700 transition-colors duration-200`} end>
                     <FaMoneyBillWave /> 
                     <span>Lương</span>
+                </NavLink>
+                <NavLink to ="/admin-dashboard/cham-cong"
+                className={({isActive}) => `${isActive ? "bg-teal-300": " "} flex items-center space-x-4 block py-2.5 px-4 rounded hover:bg-gray-700 transition-colors duration-200`} end>
+                    <FaRegCalendarCheck  /> 
+                    <span>Chấm công</span>
+                </NavLink>
+                <NavLink to ="/admin-dashboard/bao-cao-cham-cong"
+                className={({isActive}) => `${isActive ? "bg-teal-300": " "} flex items-center space-x-4 block py-2.5 px-4 rounded hover:bg-gray-700 transition-colors duration-200`} end>
+                    <FaRegCalendarAlt /> 
+                    <span>Báo cáo chấm công</span>
                 </NavLink>
                 <NavLink to ="/admin-dashboard/cai-dat"
                 className={({isActive}) => `${isActive ? "bg-teal-300": " "} flex items-center space-x-4 block py-2.5 px-4 rounded hover:bg-gray-700 transition-colors duration-200`} end>
