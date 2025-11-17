@@ -24,6 +24,8 @@ import AddLeave from "./components/leave/Add.jsx";
 import CheckLeave from "./components/leave/CheckLeave.jsx";
 import LeaveDetail from "./components/leave/Detail.jsx";
 import Setting from "./components/EmployeeDashboard/Setting.jsx";
+import Attendance from "./components/attendance/Attendance.jsx";
+import AttendanceReport from "./components/attendance/AttendanceReport.jsx";
 // Component bảo vệ route + kiểm tra user
 const ProtectedEmployeeRoute = ({ children }) => {
   const { user, loading } = UseAuth();
@@ -76,8 +78,9 @@ function App() {
           <Route path="nghi-phep" element = {<CheckLeave/>} />     
           <Route path="nghi-phep/:id" element = {<LeaveDetail/>} />     
           <Route path="cai-dat" element = {<Setting/>}/>
-          </Route>
-
+          <Route path="cham-cong" element = {<Attendance/>}/>
+          <Route path="bao-cao-cham-cong" element = {<AttendanceReport/>}/>
+        </Route>
         {/* EMPLOYEE ROUTES – BẢO VỆ USER */}
         <Route
           path="/employee-dashboard"
