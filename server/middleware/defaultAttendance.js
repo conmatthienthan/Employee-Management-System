@@ -3,18 +3,43 @@ import Attendance from "../models/Attendance.js";
 
 const defaultAttendance = async (req, res, next) => {
     try {
-        const date = new Date().toISOString().split("T")[0]; // Lấy ngày hiện tại ở định dạng YYYY-MM-DD
-        const existingAttendance = await Attendance.findOne({date});
+        const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
 
-        if (!existingAttendance) {
-            const employees = await Employee.find({});
-            const attendance = employees.map(employee => ({ date, employee: employee._id }));
+        // Lấy danh sách tất cả nhân viên
+        const employees = await Employee.find({}).select("_id");
+        const employeeIds = employees.map(emp => emp._id);
 
-            await Attendance.insertMany(attendance);
+        // Tìm những nhân viên ĐÃ có chấm công hôm nay
+        const existingRecords = await Attendance.find({ 
+            date: today 
+        }).select("employeeId");
+
+        const existingEmployeeIds = existingRecords.map(record => record.employeeId.toString());
+
+        // Lọc ra những nhân viên CHƯA có bản ghi chấm công hôm nay
+        const missingEmployeeIds = employeeIds.filter(
+            id => !existingEmployeeIds.includes(id.toString())
+        );
+
+        // Nếu còn nhân viên chưa có → tạo mới
+        if (missingEmployeeIds.length > 0) {
+            const newAttendanceRecords = missingEmployeeIds.map(employeeId => ({
+                date: today,
+                employeeId,
+                status: null
+            }));
+
+            await Attendance.insertMany(newAttendanceRecords);
+            console.log(`Đã tạo ${newAttendanceRecords.length} bản ghi chấm công mặc định cho ngày ${today}`);
+        }
+
+        next(); // Luôn đi tiếp, dù có tạo hay không
+    } catch (error) {
+        console.error("Lỗi middleware defaultAttendance:", error);
+        // Không nên res ở đây vì sẽ gây lỗi "Headers already sent" nếu đã gửi response ở controller
+        // Thay vào đó để lỗi rơi vào controller → controller sẽ bắt và trả 500
+        next(error); // hoặc res.status(500).json(...) nếu muốn
     }
-    next();
-} catch (error) {
-    res.status(500).json({ message: "Lỗi khi khởi tạo bảng chấm công mặc định", error: error.message });
-    }
-}
+};
+
 export default defaultAttendance;
