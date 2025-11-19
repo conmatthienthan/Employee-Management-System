@@ -55,4 +55,38 @@ const updateAttendance = async (req, res) => {
   }
 };
 
-export { getAttendance, updateAttendance };
+const  attendanceReport  = async (req, res) => {
+  try {
+    const {date, limit = 10, skip = 0} = req.query;
+    const query = date ? { date } : {};
+    if (date) {
+      query.date = date;
+    }
+    const attendanceData = await Attendance.find(query)
+      .populate({
+        path: "employeeId",
+        populate: [
+          "department",
+          "userId"
+        ]
+      }).sort({date: -1}).limit(parseInt(limit)).skip(parseInt(skip));
+
+      const groupData = attendanceData.reduce((result, record) => {
+        if (!result[record.date]) {
+          result[record.date] = [];
+        }
+        result[record.date].push({
+          employeeId: record.employeeId.employeeId,
+          employeeName: record.employeeId.userId.name,
+          departmentName: record.employeeId.department.dep_name,
+          status: record.status|| "Chưa chấm công"
+        });
+        return result;
+      }, {});
+      return res.status(200).json({ success: true, groupData });
+  } catch (error) {
+    console.error("Lỗi lấy báo cáo chấm công:", error);
+    res.status(500).json({ success: false, message: "Lỗi server khi lấy báo cáo chấm công" });
+  }
+} 
+export { getAttendance, updateAttendance,  attendanceReport  };
